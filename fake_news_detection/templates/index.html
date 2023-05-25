@@ -1,0 +1,37 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Identificador de Fake News</title>
+</head>
+<body>
+    <h1>Identificador de Fake News</h1>
+    <form id="classification-form" action="/classify" method="post">
+        <textarea name="text" placeholder="Insira o texto para classificação"></textarea>
+        <button type="submit">Classificar</button>
+    </form>
+    <div id="classification-result"></div>
+    
+    <script>
+        const form = document.getElementById("classification-form");
+        const resultDiv = document.getElementById("classification-result");
+        
+        form.addEventListener("submit", (event) => {
+            event.preventDefault();
+            
+            const formData = new FormData(form);
+            const text = formData.get("text");
+            
+            fetch("/classify", {
+                method: "POST",
+                body: new URLSearchParams(formData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                const prediction = data.prediction;
+                resultDiv.innerHTML = `<p>A classificação é: ${prediction}</p>`;
+            });
+        });
+    </script>
+</body>
+</html>
